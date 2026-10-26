@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050914">
+<title>JARVAS MAX | Assistente Virtual</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050914;color:#eafaff;font-family:Arial,sans-serif}
+header{padding:20px;border-bottom:1px solid #16415b;color:#00d9ff;font-weight:bold;letter-spacing:3px;font-size:22px}
+main{max-width:800px;margin:auto;padding:24px 15px}
+.hero{text-align:center;padding:35px 0}
+.orb{width:120px;height:120px;border-radius:50%;margin:auto auto 25px;background:radial-gradient(circle at 35% 30%,white,#00d9ff 15%,#07529e 48%,#071020 72%);box-shadow:0 0 35px #00cfff,0 0 85px #0088ff55;animation:pulse 3s infinite}
+@keyframes pulse{50%{transform:scale(1.07);box-shadow:0 0 60px #00d9ff}}
+h1{font-size:30px;margin:0 0 12px}
+p{color:#91adbf;line-height:1.6}
+.panel{border:1px solid #19415a;background:#081321;border-radius:16px;overflow:hidden}
+#chat{height:300px;overflow:auto;padding:14px}
+.msg{padding:12px;margin:9px 0;border-radius:12px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.5}
+.bot{background:#10263c}
+.user{background:#06425b;margin-left:15%}
+.controls{display:flex;gap:8px;padding:12px;border-top:1px solid #19415a}
+input{flex:1;min-width:0;padding:13px;background:#050c17;color:white;border:1px solid #25465d;border-radius:10px}
+button{background:#073d58;color:white;border:1px solid #087da5;border-radius:10px;padding:12px;cursor:pointer}
+button:hover{border-color:#00d9ff}
+.quick{display:flex;flex-wrap:wrap;gap:8px;padding:0 12px 12px}
+.small{text-align:center;font-size:12px;padding:15px}
+@media(max-width:450px){.controls{flex-wrap:wrap}input{flex-basis:100%}}
+</style>
+</head>
+<body>
+<header>JARVAS MAX</header>
+<main>
+<section class="hero">
+<div class="orb"></div>
+<h1>Inteligência além dos limites.</h1>
+<p>Seu assistente virtual futurista para ideias, conhecimento e tecnologia.</p>
+</section>
+<section class="panel">
+<div id="chat">
+<div class="msg bot">Olá! Sou o JARVAS MAX. Posso conversar com você, ajudar nos estudos e explicar assuntos de tecnologia. Para respostas com inteligência artificial real, precisamos conectar uma API.</div>
+</div>
+<div class="quick">
+<button onclick="preset('Me dê uma reflexão para hoje.')">Reflexão do dia</button>
+<button onclick="preset('Me ajude a organizar minhas finanças.')">Finanças</button>
+<button onclick="preset('Me ensine algo sobre tecnologia.')">Tecnologia</button>
+</div>
+<div class="controls">
+<input id="entrada" placeholder="Digite sua mensagem..." onkeydown="if(event.key==='Enter')enviar()">
+<button onclick="ouvir()">🎙️</button>
+<button onclick="enviar()">Enviar</button>
+</div>
+<div class="small" id="status">Interface JARVAS MAX · Versão inicial</div>
+</section>
+</main>
+<script>
+const chat=document.getElementById('chat');
+const entrada=document.getElementById('entrada');
+function add(text,type){
+ const d=document.createElement('div');
+ d.className='msg '+type;
+ d.textContent=text;
+ chat.appendChild(d);
+ chat.scrollTop=chat.scrollHeight;
+}
+function preset(t){entrada.value=t;enviar()}
+function enviar(){
+ const t=entrada.value.trim();
+ if(!t)return;
+ entrada.value='';
+ add(t,'user');
+ add('Sua mensagem foi recebida! Esta versão é apenas a interface visual. Para obter respostas inteligentes e pesquisas na internet, será necessário conectar um serviço de IA ao site.','bot');
+}
+function ouvir(){
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SR){document.getElementById('status').textContent='Reconhecimento de voz indisponível neste navegador.';return}
+ const r=new SR();
+ r.lang='pt-BR';
+ r.onresult=e=>{entrada.value=e.results[0][0].transcript;enviar()};
+ r.onerror=()=>document.getElementById('status').textContent='Verifique a permissão do microfone.';
+ r.start();
+}
+</script>
+</body>
+</html>
