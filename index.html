@@ -1,74 +1,28 @@
-const chat = document.getElementById('chat');
-const entrada = document.getElementById('entrada');
-const statusDiv = document.getElementById('status');
-
-function add(text, type) {
-    const d = document.createElement('div');
-    d.className = 'msg ' + type;
-    d.textContent = text;
-    chat.appendChild(d);
-    chat.scrollTop = chat.scrollHeight;
-}
-
-function preset(t) {
-    entrada.value = t;
-    enviar();
-}
-
-async function enviar() {
-    const t = entrada.value.trim();
-    if (!t) return;
-    entrada.value = '';
-    add(t, 'user');
-    
-    // Indicador visual de carregamento
-    const loadingId = 'loading-' + Date.now();
-    const loadingDiv = document.createElement('div');
-    loadingDiv.className = 'msg bot';
-    loadingDiv.id = loadingId;
-    loadingDiv.textContent = 'JARVAS está pensando...';
-    chat.appendChild(loadingDiv);
-    chat.scrollTop = chat.scrollHeight;
-
-    try {
-        // Exemplo usando uma rota de backend própria (recomendado para segurança da chave de API)
-        // ou chamando diretamente se estiver testando localmente com chave de teste
-        const respostaAI = await chamarAPI(t);
-        
-        document.getElementById(loadingId).remove();
-        add(respostaAI, 'bot');
-    } catch (error) {
-        document.getElementById(loadingId).remove();
-        add('Desculpe, ocorreu um erro ao processar sua solicitação.', 'bot');
-        statusDiv.textContent = 'Erro na conexão com a IA.';
-    }
-}
-
 async function chamarAPI(mensagem) {
-    /* 
-      NOTA DE SEGURANÇA: Expor chaves de API diretamente no Front-end (HTML/JS) 
-      permite que qualquer pessoa as visualize inspecionando o código. 
-      O ideal é criar um pequeno servidor backend (Node.js/Python) para intermediar 
-      as chamadas à API de IA.
-    */
+    const apiKey = "SUA_CHAVE_DE_API_AQUI"; // Insira sua chave da API do Gemini
     
-    // Simulação de chamada real (substitua pelo endpoint do seu backend ou API)
-    const respostaSimulada = `Processando com inteligência artificial: "${mensagem}". Conecte seu backend para obter respostas dinâmicas em tempo real.`;
-    return new Promise(resolve => setTimeout(() => resolve(respostaSimulada), 1000));
-}
+    try {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                contents: [{
+                    parts: [{ text: mensagem }]
+                }]
+            })
+        });
 
-function ouvir() {
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SR) {
-        statusDiv.textContent = 'Reconhecimento de voz indisponível neste navegador.';
-        return;
+        const data = await response.json();
+        
+        if (data.candidates && data.candidates[0].content.parts[0].text) {
+            return data.candidates[0].content.parts[0].text;
+        } else {
+            return "Não consegui processar uma resposta no momento.";
+        }
+    } catch (err) {
+        console.error(err);
+        throw new Error("Falha na comunicação com a API");
     }
-    const r = new SR();
-    r.lang = 'pt-BR';
-    r.onresult = e => {
-        entrada.value = e.results[0][0].transcript;
-        enviar();
-    };
-    r.onerror = () => statusDiv.textContent = 'Verifique a permissão do microfone.';
-    r.start();
 }
