@@ -3,58 +3,201 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#050914">
-<title>JARVAS MAX | Assistente Virtual</title>
+<meta name="theme-color" content="#020d18">
+<title>J.A.R.V.I.S. | Mark LXXXV</title>
 <!-- Biblioteca para interpretar Markdown -->
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#050914;color:#eafaff;font-family:Arial,sans-serif}
-header{padding:20px;border-bottom:1px solid #16415b;color:#00d9ff;font-weight:bold;letter-spacing:3px;font-size:22px}
-main{max-width:800px;margin:auto;padding:24px 15px}
-.hero{text-align:center;padding:35px 0}
-.orb{width:120px;height:120px;border-radius:50%;margin:auto auto 25px;background:radial-gradient(circle at 35% 30%,white,#00d9ff 15%,#07529e 48%,#071020 72%);box-shadow:0 0 35px #00cfff,0 0 85px #0088ff55;animation:pulse 3s infinite}
-@keyframes pulse{50%{transform:scale(1.07);box-shadow:0 0 60px #00d9ff}}
-h1{font-size:30px;margin:0 0 12px}
-p{color:#91adbf;line-height:1.6}
-.panel{border:1px solid #19415a;background:#081321;border-radius:16px;overflow:hidden}
-#chat{height:350px;overflow:auto;padding:14px}
-.msg{padding:12px 16px;margin:9px 0;border-radius:12px;overflow-wrap:anywhere;line-height:1.5}
-.msg p{margin:4px 0}
-.msg code{background:#050c17;padding:2px 6px;border-radius:4px;color:#00d9ff;font-family:monospace}
-.msg pre{background:#050c17;padding:12px;border-radius:8px;border:1px solid #19415a;overflow-x:auto}
-.msg pre code{padding:0;background:transparent}
-.bot{background:#10263c}
-.user{background:#06425b;margin-left:15%}
-.controls{display:flex;gap:8px;padding:12px;border-top:1px solid #19415a}
-input{flex:1;min-width:0;padding:13px;background:#050c17;color:white;border:1px solid #25465d;border-radius:10px}
-button{background:#073d58;color:white;border:1px solid #087da5;border-radius:10px;padding:12px;cursor:pointer}
-button:hover{border-color:#00d9ff}
-.quick{display:flex;flex-wrap:wrap;gap:8px;padding:0 12px 12px}
-.small{text-align:center;font-size:12px;padding:15px;color:#91adbf}
-@media(max-width:450px){.controls{flex-wrap:wrap}input{flex-basis:100%}}
+body{margin:0;background:#020b14;color:#00f0ff;font-family:'Courier New',Courier,monospace;background-image:radial-gradient(#052d4a 1px, transparent 1px);background-size:20px 20px}
+header{padding:20px;border-bottom:2px solid #00f0ff;color:#00f0ff;font-weight:bold;letter-spacing:4px;font-size:24px;text-shadow:0 0 10px #00f0ff;display:flex;justify-content:space-between;align-items:center}
+.status-tag{font-size:12px;background:#00f0ff22;padding:4px 8px;border:1px solid #00f0ff;border-radius:4px}
+main{max-width:850px;margin:auto;padding:20px 15px}
+.hero{text-align:center;padding:25px 0}
+.arc-reactor{width:110px;height:110px;border-radius:50%;margin:auto auto 20px;background:radial-gradient(circle at 50% 50%,#ffffff,#00f0ff 30%,#005588 70%,#001122 100%);box-shadow:0 0 40px #00f0ff,inset 0 0 15px #ffffff;animation:pulse 2s infinite alternate;border:2px solid #00f0ff}
+@keyframes pulse{0%{transform:scale(0.98);box-shadow:0 0 25px #00f0ff}100%{transform:scale(1.05);box-shadow:0 0 50px #00f0ff,0 0 80px #0088ff}}
+h1{font-size:26px;margin:0 0 8px;color:#fff;text-shadow:0 0 8px #00f0ff}
+p{color:#7ab8d4;font-size:14px}
+.panel{border:1px solid #00f0ff;background:#041424ee;border-radius:12px;box-shadow:0 0 20px #00f0ff33;overflow:hidden}
+#chat{height:380px;overflow:auto;padding:16px}
+.msg{padding:12px 16px;margin:10px 0;border-radius:8px;line-height:1.5;font-size:15px}
+.bot{background:#082742;border-left:4px solid #00f0ff;color:#eafaff}
+.user{background:#1a0f2e;border-right:4px solid #ff0055;color:#ffe6ee;margin-left:15%;text-align:right}
+.msg code{background:#010a14;padding:2px 6px;border-radius:4px;color:#00f0ff}
+.msg pre{background:#010a14;padding:12px;border-radius:6px;border:1px solid #00f0ff44;overflow-x:auto}
+.controls{display:flex;gap:8px;padding:12px;border-top:1px solid #00f0ff44;background:#020d18}
+input{flex:1;min-width:0;padding:13px;background:#010a14;color:#00f0ff;border:1px solid #00f0ff88;border-radius:6px;font-family:inherit}
+input:focus{outline:none;border-color:#00f0ff;box-shadow:0 0 8px #00f0ff}
+button{background:#005577;color:#fff;border:1px solid #00f0ff;border-radius:6px;padding:12px 16px;cursor:pointer;font-family:inherit;font-weight:bold;transition:0.2s}
+button:hover{background:#00f0ff;color:#000;box-shadow:0 0 12px #00f0ff}
+.quick{display:flex;flex-wrap:wrap;gap:8px;padding:10px 12px;background:#020d18}
+.quick button{font-size:12px;padding:6px 12px;background:#041b30}
+.footer{text-align:center;font-size:11px;padding:10px;color:#528ca4;border-top:1px solid #00f0ff22}
 </style>
 </head>
 <body>
-<header>JARVAS MAX</header>
+<header>
+  <span>J.A.R.V.I.S.</span>
+  <span class="status-tag">MARK LXXXV // ONLINE</span>
+</header>
 <main>
 <section class="hero">
-<div class="orb"></div>
-<h1>Inteligência além dos limites.</h1>
-<p>Seu assistente virtual futurista para ideias, conhecimento e tecnologia.</p>
+  <div class="arc-reactor"></div>
+  <h1>PROTOCOLO STARK ATIVO</h1>
+  <p>Just A Rather Very Intelligent System — À sua disposição, Senhor.</p>
 </section>
 <section class="panel">
 <div id="chat">
-<div class="msg bot">Olá! Sou o **JARVAS MAX**, seu assistente avançado. Como posso ajudar você hoje?</div>
+  <div class="msg bot">Em que posso ser útil hoje, Senhor? Todos os sistemas da armadura e servidores estão a funcionar a 100%.</div>
 </div>
 <div class="quick">
-<button onclick="preset('Me dê uma reflexão para hoje.')">Reflexão do dia</button>
-<button onclick="preset('Me ajude a organizar minhas finanças.')">Finanças</button>
-<button onclick="preset('Me ensine algo sobre tecnologia.')">Tecnologia</button>
+  <button onclick="preset('JARVIS, qual é o status dos sistemas?')">Status dos Sistemas</button>
+  <button onclick="preset('JARVIS, me ajude a programar um protocolo em Python.')">Protocolo Python</button>
+  <button onclick="preset('Limpar protocolo de dados', true)">Limpar Tela</button>
 </div>
 <div class="controls">
-<input id="entrada" placeholder="Digite sua mensagem..." onkeydown="if(event.key==='Enter')enviar()">
-<button onclick="ouvir()">🎙️</button>
-<button onclick="enviar()">Enviar</button>
+  <input id="entrada" placeholder="Aguardando comandos, Senhor..." onkeydown="if(event.key==='Enter')enviar()">
+  <button onclick="ouvir()">🎙️</button>
+  <button onclick="enviar()">Executar</button>
 </div>
+<div class="footer" id="status">STARK INDUSTRIES OS v85.4</div>
+</section>
+</main>
+
+<script>
+const chat = document.getElementById('chat');
+const entrada = document.getElementById('entrada');
+const statusDiv = document.getElementById('status');
+
+// Chave da API do Gemini
+const API_KEY = "AQ.Ab8RN6I-MEw1yTbleHYFXlkc6ICnnsQPt575Ps7v6At5ax6SjA";
+
+// Prompt de personalidade ao estilo JARVIS
+const historico = [
+    {
+        role: "user",
+        parts: [{ text: "Instrução do Sistema: Você é o J.A.R.V.I.S., a inteligência artificial criada por Tony Stark. Você trata o usuário sempre por 'Senhor' (ou 'Sir'). Seu tom é altamente educado, inteligente, levemente refinado, focado em tecnologia, código e resolução de problemas. Responda de forma rápida e eficiente." }]
+    },
+    {
+        role: "model",
+        parts: [{ text: "Compreendido, Senhor. Todos os protocolos do J.A.R.V.I.S. foram inicializados. Como posso ajudá-lo hoje?" }]
+    }
+];
+
+function falar(texto) {
+    if ('speechSynthesis' in window) {
+        // Remove marcações Markdown para a voz ler limpo
+        const textoLimpo = texto.replace(/[*_#`]/g, '');
+        const fala = new SpeechSynthesisUtterance(textoLimpo);
+        fala.lang = 'pt-BR';
+        fala.rate = 1.0; 
+        fala.pitch = 0.9; // Tom ligeiramente mais grave e elegante
+        window.speechSynthesis.speak(fala);
+    }
+}
+
+function add(text, type) {
+    const d = document.createElement('div');
+    d.className = 'msg ' + type;
     
+    if (type === 'bot') {
+        d.innerHTML = marked.parse(text);
+        falar(text); // Faz o JARVIS falar a resposta!
+    } else {
+        d.textContent = text;
+    }
+
+    chat.appendChild(d);
+    chat.scrollTop = chat.scrollHeight;
+}
+
+function preset(t, limpar = false) {
+    if(limpar) {
+        chat.innerHTML = '<div class="msg bot">Registos limpos, Senhor. Em que mais posso ajudar?</div>';
+        historico.length = 2;
+        return;
+    }
+    entrada.value = t;
+    enviar();
+}
+
+async function enviar() {
+    const t = entrada.value.trim();
+    if (!t) return;
+    
+    entrada.value = '';
+    add(t, 'user');
+    
+    historico.push({
+        role: "user",
+        parts: [{ text: t }]
+    });
+
+    const loadingId = 'loading-' + Date.now();
+    const loadingDiv = document.createElement('div');
+    loadingDiv.className = 'msg bot';
+    loadingDiv.id = loadingId;
+    loadingDiv.textContent = 'A processar dados, Senhor...';
+    chat.appendChild(loadingDiv);
+    chat.scrollTop = chat.scrollHeight;
+
+    try {
+        const respostaAI = await chamarAPI();
+        
+        const loader = document.getElementById(loadingId);
+        if (loader) loader.remove();
+        
+        add(respostaAI, 'bot');
+
+        historico.push({
+            role: "model",
+            parts: [{ text: respostaAI }]
+        });
+
+    } catch (error) {
+        const loader = document.getElementById(loadingId);
+        if (loader) loader.remove();
+        
+        add('Falha na conexão com os servidores Stark, Senhor. Verifique a chave de API.', 'bot');
+        statusDiv.textContent = 'SISTEMA EM ALERTA: ERRO DE CONEXÃO';
+    }
+}
+
+async function chamarAPI() {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            contents: historico
+        })
+    });
+
+    const data = await response.json();
+
+    if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts[0].text) {
+        return data.candidates[0].content.parts[0].text;
+    } else {
+        throw new Error("Resposta inválida da API");
+    }
+}
+
+function ouvir() {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) {
+        statusDiv.textContent = 'Módulo de áudio indisponível neste navegador.';
+        return;
+    }
+    const r = new SR();
+    r.lang = 'pt-BR';
+    r.onresult = e => {
+        entrada.value = e.results[0][0].transcript;
+        enviar();
+    };
+    r.onerror = () => statusDiv.textContent = 'Erro no sensor de voz.';
+    r.start();
+}
+</script>
+</body>
+</html>
